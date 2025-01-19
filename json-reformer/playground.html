@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON Modifier</title>
+  <script type="module"  src="./dist/index.js"></script> 
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    textarea {
+      width: 100%;
+      height: 150px;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 14px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 10px;
+      border: 1px solid #ddd;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>JSON Modifier</h1>
+    <label for="inputJson">Original JSON:</label>
+    <textarea id="inputJson">{ "name": "Alice", "age": 25 }</textarea>
+
+    <button class="btn" onclick="modifyJsonUI()">Modify JSON</button>
+
+    <h2>Modified JSON:</h2>
+    <pre id="outputJson"></pre>
+  </div>
+
+  <script >
+    // import { modifyJson } from './dist/index.js';
+    // Example `modifyJson` function for testing.
+    function modifyJsonUI() {
+      const inputJson = document.getElementById('inputJson').value;
+      const outputElement = document.getElementById('outputJson');
+
+      try {
+        // Parse the JSON from the textarea
+        const parsedInput = JSON.parse(inputJson);
+
+        // Apply the modifyJson function
+        const modifiedData = modifyJson(parsedInput);
+
+        // Convert the modified object back to a JSON string
+        const modifiedJson = JSON.stringify(modifiedData, null, 2);
+
+        // Display the modified JSON in the output area
+        outputElement.textContent = modifiedJson;
+      } catch (error) {
+        // Display an error message if JSON is invalid
+        outputElement.textContent = `Error: ${error.message}`;
+      }
+    }
+  </script>
+</body>
+</html>

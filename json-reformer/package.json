@@ -1,5 +1,5 @@
 {
-  "name": "json-reformer",
+  "name": "@TechArt-Software/json-reformer",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
