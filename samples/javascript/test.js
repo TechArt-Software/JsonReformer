@@ -1,5 +1,5 @@
 // Import the library
-import { modifyJson } from '@TechArt-Software/json-reformer';
+import { modifyJson } from '@techart-software/json-reformer';
 
 // Input JSON string
 const inputJson = '{"name": "Alice", "age": 25}';

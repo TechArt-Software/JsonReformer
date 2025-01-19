@@ -1,5 +1,5 @@
 {
-  "name": "@TechArt-Software/json-reformer",
+  "name": "@techart-software/json-reformer",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
@@ -9,6 +9,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
      "build": "tsc"
   },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC",
