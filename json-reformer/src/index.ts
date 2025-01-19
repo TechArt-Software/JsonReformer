@@ -5,7 +5,7 @@ export function modifyJson(inputJson: string, modifier: (data: any) => any): str
 
         const parsedData = JSON.parse(inputJson);
        
-        parsedData.name = parsedData.name + "Modified";
+        parsedData.name = parsedData.name + "_modified";
 
         return JSON.stringify(parsedData);
     } catch (error) {

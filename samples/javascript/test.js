@@ -2,7 +2,7 @@
 import { modifyJson } from '@techart-software/json-reformer';
 
 // Input JSON string
-const inputJson = '{"name": "Alice", "age": 25}';
+const inputJson = '{"name": "Babak", "age": 25}';
 
 // Use the modifyJson function
 const modifiedJson = modifyJson(inputJson, (data) => {
