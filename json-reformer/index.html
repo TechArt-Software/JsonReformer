@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JSON Modifier</title>
-  <script type="module"  src="./dist/index.js"></script> 
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -54,19 +54,16 @@
     <pre id="outputJson"></pre>
   </div>
 
-  <script >
-    // import { modifyJson } from './dist/index.js';
-    // Example `modifyJson` function for testing.
+  <script type="module">
+    import { modifyJson } from './dist/index.js';
+
     function modifyJsonUI() {
       const inputJson = document.getElementById('inputJson').value;
       const outputElement = document.getElementById('outputJson');
-
+     
       try {
-        // Parse the JSON from the textarea
-        const parsedInput = JSON.parse(inputJson);
-
         // Apply the modifyJson function
-        const modifiedData = modifyJson(parsedInput);
+        const modifiedData = modifyJson(inputJson);
 
         // Convert the modified object back to a JSON string
         const modifiedJson = JSON.stringify(modifiedData, null, 2);
@@ -78,6 +75,9 @@
         outputElement.textContent = `Error: ${error.message}`;
       }
     }
+
+    // Attach the function to the window object
+    window.modifyJsonUI = modifyJsonUI;
   </script>
 </body>
 </html>
