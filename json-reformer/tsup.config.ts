@@ -1,4 +1,5 @@
 import { defineConfig } from 'tsup';
+import { execSync } from 'child_process';
 
 export default defineConfig({
     entryPoints: ['src/index.ts'],
@@ -9,4 +10,7 @@ export default defineConfig({
     sourcemap: true,
     external: ['fs', 'path'],
     ignoreWatch: ['**/dist', '**/node_modules'],
+    onSuccess: () => {
+        return execSync('cp index.html dist/');
+    }
 });
