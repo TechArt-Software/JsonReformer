@@ -46,7 +46,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './JsonReformer/json-reformer/dist'
+          path: './json-reformer/dist'
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
