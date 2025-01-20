@@ -47,11 +47,6 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: './json-reformer/dist'
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # Upload only the json-reformer folder
-          path: './json-reformer'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
