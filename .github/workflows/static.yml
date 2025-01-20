@@ -43,6 +43,8 @@ jobs:
       - name: Build project
         run: npm run build
         working-directory: ./json-reformer
+      - name: Copy index.html
+        run: cp ./json-reformer/index.html ./json-reformer/dist/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
