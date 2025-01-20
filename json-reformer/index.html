@@ -3,81 +3,123 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JSON Modifier</title>
+  <title>Json Reformer</title>
 
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 20px;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
+
+    h1 {
+      margin: 20px 0;
+    }
+
     .container {
-      max-width: 600px;
-      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      width: 80%;
+      height: calc(100vh - 150px); /* Dynamic height calculation */
     }
+
+    .textarea-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+    }
+
     textarea {
       width: 100%;
-      height: 150px;
-      margin: 10px 0;
+      height: 100%;
+      resize: none;
       padding: 10px;
+      box-sizing: border-box;
       font-size: 14px;
     }
-    .btn {
-      display: inline-block;
+
+    label {
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .footer {
+      margin-top: 20px;
+      text-align: center;
+      width: 100%;
+    }
+
+    .footer button {
       padding: 10px 20px;
-      background-color: #007BFF;
-      color: white;
-      border: none;
-      border-radius: 5px;
+      font-size: 16px;
       cursor: pointer;
-    }
-    .btn:hover {
-      background-color: #0056b3;
-    }
-    pre {
-      background: #f4f4f4;
-      padding: 10px;
-      border: 1px solid #ddd;
-      white-space: pre-wrap;
-      word-wrap: break-word;
     }
   </style>
 </head>
 <body>
+  <h1>Json Reformer</h1>
   <div class="container">
-    <h1>JSON Modifier</h1>
-    <label for="inputJson">Original JSON:</label>
-    <textarea id="inputJson">{ "name": "Alice", "age": 25 }</textarea>
-
-    <button class="btn" onclick="modifyJsonUI()">Modify JSON</button>
-
-    <h2>Modified JSON:</h2>
-    <pre id="outputJson"></pre>
+    <div class="textarea-container">
+      <label for="input-json">Input Json</label>
+      <textarea id="input-json">{ "name": "Alice", "age": 25 }</textarea>
+    </div>
+    <div class="textarea-container">
+      <label for="reform-model">Model</label>
+      <textarea id="reform-model"></textarea>
+    </div>
+    <div class="textarea-container">
+      <label for="output-json">Output Json</label>
+      <textarea id="output-json"></textarea>
+    </div>
+  </div>
+  <div class="footer">
+    <button id="apply-button" onclick="modifyJsonUI()">Reform</button>
   </div>
 
   <script type="module">
     import { modifyJson } from './dist/index.js';
 
     function modifyJsonUI() {
-      const inputJson = document.getElementById('inputJson').value;
-      const outputElement = document.getElementById('outputJson');
+      const inputJson = document.getElementById('input-json').value;
+      const outputElement = document.getElementById('output-json');
      
       try {
         // Apply the modifyJson function
         const modifiedData = modifyJson(inputJson);
 
         // Convert the modified object back to a JSON string
-        const modifiedJson = JSON.stringify(modifiedData, null, 2);
+        const beautifiedJson = JSON.stringify(modifiedData, null, 2);
 
-        // Display the modified JSON in the output area
-        outputElement.textContent = modifiedJson;
+        // Display the beautified JSON in the output area
+        outputElement.value = beautifiedJson;
       } catch (error) {
         // Display an error message if JSON is invalid
-        outputElement.textContent = `Error: ${error.message}`;
+        outputElement.value = `Error: ${error.message}`;
+      }
+    }
+
+    function beautifyJSONOnLoad() {
+      const inputJsonElement = document.getElementById('input-json');
+      try {
+        const parsedJson = JSON.parse(inputJsonElement.value);
+        const beautifiedJson = JSON.stringify(parsedJson, null, 2);
+        inputJsonElement.value = beautifiedJson;
+      } catch (error) {
+        console.warn('Invalid JSON in the input field on page load.');
       }
     }
 
     // Attach the function to the window object
     window.modifyJsonUI = modifyJsonUI;
+
+    // Beautify JSON in the input field when the page loads
+    window.addEventListener('DOMContentLoaded', beautifyJSONOnLoad);
   </script>
 </body>
 </html>
