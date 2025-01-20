@@ -45,6 +45,8 @@ jobs:
         working-directory: ./json-reformer
       - name: Copy index.html
         run: cp ./json-reformer/index.html ./json-reformer/dist/
+      - name: Show contents of json-reformer
+        run: ls -R ./json-reformer
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
