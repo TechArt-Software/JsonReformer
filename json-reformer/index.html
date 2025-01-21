@@ -67,11 +67,43 @@
   <div class="container">
     <div class="textarea-container">
       <label for="input-json">Input Json</label>
-      <textarea id="input-json">{ "name": "Alice", "age": 25 }</textarea>
+      <textarea id="input-json">{
+        "array": [
+          { "one" : 1 },
+          { "two" : 2 },
+          { "three" : 4 }
+        ],
+        "boolean": true,
+        "null": null,
+        "number": 123,
+        "object": {
+          "a": "b",
+          "c": "d"
+        },
+        "string": "Hello World"
+      }</textarea>
     </div>
     <div class="textarea-container">
       <label for="reform-model">Model</label>
-      <textarea id="reform-model"></textarea>
+      <textarea id="reform-model">{
+        "reformers": [
+          {
+            "array[1].two": 2
+          },
+          {
+            "boolean": false
+          },
+          {
+            "number": 111
+          },
+          {
+            "object.c": "c"
+          },
+          {
+            "string": "changed hello"
+          }
+        ]
+      }</textarea>
     </div>
     <div class="textarea-container">
       <label for="output-json">Output Json</label>
@@ -84,19 +116,17 @@
 
   <script type="module">
     import { objectReformer } from './index.js';
+    const inputJson = document.getElementById('input-json');
+    const modelElement = document.getElementById('reform-model').value;
+    const outputElement = document.getElementById('output-json');
 
-    function modifyJsonUI() {
-      const inputJson = document.getElementById('input-json').value;
-      const outputElement = document.getElementById('output-json');
-     
+    function modifyJsonUI() { 
       try {
         // Apply the modifyJson function
-        
         const reformer = objectReformer();
-
-        const input = JSON.parse(inputJson);
-
-        const modifiedData = reformer.reform(input);
+        const input = JSON.parse(inputJson.value);
+        const model = JSON.parse(modelElement);
+        const modifiedData = reformer.reform(input, model);
 
         // Convert the modified object back to a JSON string
         const beautifiedJson = JSON.stringify(modifiedData, null, 2);
@@ -110,11 +140,10 @@
     }
 
     function beautifyJSONOnLoad() {
-      const inputJsonElement = document.getElementById('input-json');
       try {
-        const parsedJson = JSON.parse(inputJsonElement.value);
+        const parsedJson = JSON.parse(inputJson.value);
         const beautifiedJson = JSON.stringify(parsedJson, null, 2);
-        inputJsonElement.value = beautifiedJson;
+        inputJson.value = beautifiedJson;
       } catch (error) {
         console.warn('Invalid JSON in the input field on page load.');
       }

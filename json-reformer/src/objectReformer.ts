@@ -6,7 +6,7 @@ export const objectReformer = () => {
                 throw new Error("Invalid input");
             }
 
-            input.name = input.name + "_modified";
+            input.model = model;
     
             return input;
         } catch (error) {
