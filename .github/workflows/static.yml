@@ -40,6 +40,9 @@ jobs:
       - name: Install dependencies
         run: npm install
         working-directory: ./json-reformer
+      - name: Run Jest tests
+        run: npm test
+        working-directory: ./json-reformer
       - name: Build project
         run: npm run build
         working-directory: ./json-reformer
