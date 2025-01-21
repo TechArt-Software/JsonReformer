@@ -83,7 +83,7 @@
   </div>
 
   <script type="module">
-    import { modifyJson } from './index.js';
+    import { objectReformer } from './index.js';
 
     function modifyJsonUI() {
       const inputJson = document.getElementById('input-json').value;
@@ -91,7 +91,12 @@
      
       try {
         // Apply the modifyJson function
-        const modifiedData = modifyJson(inputJson);
+        
+        const reformer = objectReformer();
+
+        const input = JSON.parse(inputJson);
+
+        const modifiedData = reformer.reform(input);
 
         // Convert the modified object back to a JSON string
         const beautifiedJson = JSON.stringify(modifiedData, null, 2);
