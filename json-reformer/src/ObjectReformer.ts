@@ -56,6 +56,22 @@ export const ObjectReformer = (model: ReformerModel) => {
             }
         }
     }
+
+    const setValue = (input: any, keyPath: string, newValue: any): void => {
+        try {
+          const fullPath = keyPath
+            .replace(/\[(\d+)]/g, ".$1") // Convert array indices to dot notation
+            .split(".")
+            .map(key => (/^\d+$/.test(key) ? `[${key}]` : `.${key}`))
+            .join("")
+            .replace(/^\./, ""); // Ensure no leading dot for eval
+      
+          eval(`input.${fullPath} = newValue`);
+        } catch (error: any) {
+          throw new Error(`Failed to set value at path \"${keyPath}\": ${error.message}`);
+        }
+      }
+      
     
     /// <summary>
     /// Reform the input object according to the reformer model.
@@ -69,11 +85,12 @@ export const ObjectReformer = (model: ReformerModel) => {
             for (let reformer of Model.reformers) {
                 const key = Object.keys(reformer)[0];
                 const newValue = reformer[key];
-                setPropertyValue(input, key, newValue);
+                // setPropertyValue(input, key, newValue);
+                setValue(input, key, newValue);
             }
             return input;
-        } catch (error) {
-            throw new Error("Invalid JSON input");
+        } catch (error: any) {
+            throw new Error(`Invalid JSON input:  ${error.message}` );
         }
     }
 

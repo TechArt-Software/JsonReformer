@@ -1,4 +1,4 @@
-import { ObjectReformer } from './ObjectReformer'; 
+import { ObjectReformer } from './ObjectReformer';
 import ReformerMode from './ReformerModel';
 
 describe('test objectReformer', () => {
