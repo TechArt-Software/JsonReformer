@@ -69,13 +69,13 @@
       <label for="input-json">Input Json</label>
       <textarea id="input-json">{
         "array": [
-          { "one" : 1 },
-          { "two" : 2 },
-          { "three" : 4 }
+          { "one" : 11 },
+          { "two" : 22 },
+          { "three" : 33 }
         ],
         "boolean": true,
         "null": null,
-        "number": 123,
+        "number": 44,
         "object": {
           "a": "b",
           "c": "d"
@@ -94,7 +94,7 @@
             "boolean": false
           },
           {
-            "number": 111
+            "number": 4
           },
           {
             "object.c": "c"
@@ -115,18 +115,19 @@
   </div>
 
   <script type="module">
-    import { objectReformer } from './index.js';
-    const inputJson = document.getElementById('input-json');
-    const modelElement = document.getElementById('reform-model').value;
+    import { ObjectReformer } from './index.js';
+    const inputElement = document.getElementById('input-json');
+    const modelElement = document.getElementById('reform-model');
     const outputElement = document.getElementById('output-json');
 
     function modifyJsonUI() { 
       try {
         // Apply the modifyJson function
-        const reformer = objectReformer();
-        const input = JSON.parse(inputJson.value);
-        const model = JSON.parse(modelElement);
-        const modifiedData = reformer.reform(input, model);
+        const input = JSON.parse(inputElement.value);
+        const model = JSON.parse(modelElement.value);
+
+        const reformer = ObjectReformer(model);
+        const modifiedData = reformer.reform(input);
 
         // Convert the modified object back to a JSON string
         const beautifiedJson = JSON.stringify(modifiedData, null, 2);
@@ -141,9 +142,9 @@
 
     function beautifyJSONOnLoad() {
       try {
-        const parsedJson = JSON.parse(inputJson.value);
+        const parsedJson = JSON.parse(inputElement.value);
         const beautifiedJson = JSON.stringify(parsedJson, null, 2);
-        inputJson.value = beautifiedJson;
+        inputElement.value = beautifiedJson;
       } catch (error) {
         console.warn('Invalid JSON in the input field on page load.');
       }

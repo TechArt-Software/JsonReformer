@@ -1,1 +1,1 @@
-export * from './objectReformer';
+export * from './ObjectReformer';
