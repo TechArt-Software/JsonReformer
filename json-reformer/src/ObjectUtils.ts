@@ -1,11 +1,11 @@
 /// <summary>
 /// Set a property value in a nested object, given a key path.
 /// </summary>
-function setPropertyValue(input: any, keyPath: string, newValue: any, script?: string): void {
+function setPropertyValue(input: any, propertyPath: string, newValue: any, script?: string): void {
     if (script) {
-        evalSetPropertyValue(input, keyPath, newValue, script);
+        evalSetPropertyValue(input, propertyPath, newValue, script);
     } else {
-        calcSetPropertyValue(input, keyPath, newValue);
+        calcSetPropertyValue(input, propertyPath, newValue);
     }
 }
 
@@ -58,9 +58,9 @@ function setPropertyValue(input: any, keyPath: string, newValue: any, script?: s
 /// <summary>
 /// Set a property value in a nested object, given a key path.
 /// </summary>
-function evalSetPropertyValue(input: any, keyPath: string, newValue: any, script: string): void {
+function evalSetPropertyValue(input: any, propertyPath: string, newValue: any, script: string): void {
     try {
-        const fullPath = keyPath
+        const property = propertyPath
         .replace(/\[(\d+)]/g, ".$1") // Convert array indices to dot notation
         .split(".")
         .map(key => (/^\d+$/.test(key) ? `[${key}]` : `.${key}`))
@@ -68,9 +68,9 @@ function evalSetPropertyValue(input: any, keyPath: string, newValue: any, script
         .replace(/^\./, ""); // Ensure no leading dot for eval
         // Intentionally using eval for dynamic key setting
         // @ts-ignore: Suppress eval warning
-        eval(`input.${fullPath} = newValue`);
+        eval(`input.${property} = newValue`);
     } catch (error: any) {
-        throw new Error(`Failed to set value at path \"${keyPath}\": ${error.message}`);
+        throw new Error(`Failed to set value at path \"${propertyPath}\": ${error.message}`);
     }
 }
 
