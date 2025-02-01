@@ -61,16 +61,19 @@ function setPropertyValue(input: any, propertyPath: string, newValue: any, scrip
 function evalSetPropertyValue(input: any, propertyPath: string, newValue: any, script: string): void {
     try {
         const property = propertyPath
-        .replace(/\[(\d+)]/g, ".$1") // Convert array indices to dot notation
-        .split(".")
-        .map(key => (/^\d+$/.test(key) ? `[${key}]` : `.${key}`))
-        .join("")
-        .replace(/^\./, ""); // Ensure no leading dot for eval
-        // Intentionally using eval for dynamic key setting
-        // @ts-ignore: Suppress eval warning
-        eval(`input.${property} = newValue`);
+            .replace(/\[(\d+)]/g, ".$1") // Convert array indices to dot notation
+            .split(".")
+            .map(key => (/^\d+$/.test(key) ? `[${key}]` : `.${key}`))
+            .join("")
+            .replace(/^\./, ""); // Ensure no leading dot for eval
+
+        const setProperty = new Function('input', 'newValue', `
+            input.${property} = newValue;
+        `);
+        setProperty(input, newValue);
+        // return eval(`input.${property} = newValue`);
     } catch (error: any) {
-        throw new Error(`Failed to set value at path \"${propertyPath}\": ${error.message}`);
+        throw new Error(`Failed to set value at path "${propertyPath}": ${error.message}`);
     }
 }
 
