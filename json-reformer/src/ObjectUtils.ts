@@ -3,56 +3,42 @@
 /// </summary>
 function setPropertyValue(input: any, propertyPath: string, newValue: any, script?: string): void {
     if (script) {
-        evalSetPropertyValue(input, propertyPath, newValue, script);
+        return evalSetPropertyValue(input, propertyPath, newValue, script);
     } else {
-        calcSetPropertyValue(input, propertyPath, newValue);
+        return _setProperty(input, propertyPath, newValue);
     }
 }
 
- function calcSetPropertyValue (input: any, keyPath: string, newValue: any): void {
-    const keys = keyPath.split(".");
+const _getProperty = (input: any, keyPath: string): any => {
+    return keyPath.split('.').reduce((acc: any, part: string) => 
+      acc && typeof acc === 'object' ? acc[part] : undefined, input);
+};
+  
+function _setProperty(input: any, keyPath: string, newValue: any): void {
     let current: any = input;
+    const keys = keyPath.split(".");
     
-    for (let i = 0; i < keys.length; i++) {
-        const key = keys[i];
-    
-        // Check for array access like "array[1]"
-        const arrayMatch = key.match(/(.+?)\[(\d+)]/);
-        if (arrayMatch) {
-            const arrayKey = arrayMatch[1];
-            const arrayIndex = parseInt(arrayMatch[2], 10);
+    keys.forEach((key, index) => {
+        const match = key.match(/(.+?)\[(\d+)]/);
         
-            if (!current[arrayKey]) {
-                current[arrayKey] = []; // Initialize the array if it doesn't exist
-            }
+        if (match) {
+            const [_, arrayKey, arrayIndex] = match;
+            const idx = Number(arrayIndex);
+            
+            current[arrayKey] ??= [];
             if (!Array.isArray(current[arrayKey])) {
                 throw new Error(`${arrayKey} is not an array`);
             }
-            
-            if (i === keys.length - 1) {
-                // If it's the last key, set the value
-                current[arrayKey][arrayIndex] = newValue;
-            } else {
-                // If it's not the last key, ensure the array element is initialized
-                if (!current[arrayKey][arrayIndex]) {
-                current[arrayKey][arrayIndex] = {};
-                }
-                current = current[arrayKey][arrayIndex];
-            }
+
+            current = (index === keys.length - 1) 
+                ? (current[arrayKey][idx] = newValue) 
+                : (current[arrayKey][idx] ??= {});
         } else {
-            // Regular object key access
-            if (i === keys.length - 1) {
-                // If it's the last key, set the value
-                current[key] = newValue;
-            } else {
-                // If it's not the last key, ensure the object is initialized
-                if (!current[key]) {
-                current[key] = {};
-                }
-                current = current[key];
-            }
+            current = (index === keys.length - 1) 
+                ? (current[key] = newValue) 
+                : (current[key] ??= {});
         }
-    }
+    });
 }
 
 /// <summary>
@@ -70,7 +56,7 @@ function evalSetPropertyValue(input: any, propertyPath: string, newValue: any, s
         const setProperty = new Function('input', 'newValue', `
             input.${property} = newValue;
         `);
-        setProperty(input, newValue);
+        return setProperty(input, newValue);
         // return eval(`input.${property} = newValue`);
     } catch (error: any) {
         throw new Error(`Failed to set value at path "${propertyPath}": ${error.message}`);
