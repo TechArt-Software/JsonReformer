@@ -3,7 +3,7 @@
 /// </summary>
 function setPropertyValue(input: any, propertyPath: string, newValue: any, script?: string): void {
     if (script) {
-        return evalSetPropertyValue(input, propertyPath, newValue, script);
+        return _evalProperty(input, propertyPath, newValue, script);
     } else {
         return _setProperty(input, propertyPath, newValue);
     }
@@ -42,9 +42,9 @@ function _setProperty(input: any, keyPath: string, newValue: any): void {
 }
 
 /// <summary>
-/// Set a property value in a nested object, given a key path.
+/// Set a property value in a nested object, given a key path using value from script.
 /// </summary>
-function evalSetPropertyValue(input: any, propertyPath: string, newValue: any, script: string): void {
+function _evalProperty(input: any, propertyPath: string, newValue: any, script: string): void {
     try {
         const property = propertyPath
             .replace(/\[(\d+)]/g, ".$1") // Convert array indices to dot notation
@@ -53,10 +53,10 @@ function evalSetPropertyValue(input: any, propertyPath: string, newValue: any, s
             .join("")
             .replace(/^\./, ""); // Ensure no leading dot for eval
 
-        const setProperty = new Function('input', 'newValue', `
+        const evalProperty = new Function('input', 'newValue', `
             input.${property} = newValue;
         `);
-        return setProperty(input, newValue);
+        return evalProperty(input, newValue);
         // return eval(`input.${property} = newValue`);
     } catch (error: any) {
         throw new Error(`Failed to set value at path "${propertyPath}": ${error.message}`);
