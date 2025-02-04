@@ -74,7 +74,13 @@ describe('test objectReformer', () => {
                                 }
                               }
                             ],
-                            script: "input.property = newValue"
+                            scripts: [
+                                      {
+                                        "action": "setProperty",
+                                        "parameters": "input, property, currentValue, newValue",
+                                        "body": "return newValue"
+                                      }
+                                    ]
                           };
     const reformer = ObjectReformer(reformerModel);
     

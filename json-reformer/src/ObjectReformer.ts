@@ -20,7 +20,7 @@ export const ObjectReformer = (model: ReformerModel) => {
             for (let reformer of Model.reformers) {
                 const key = Object.keys(reformer)[0];
                 const newValue = reformer[key];
-                setPropertyValue(input, key, newValue, Model.script);
+                setPropertyValue(input, key, newValue, Model.scripts);
             }
             return input;
         } catch (error: any) {

@@ -85,27 +85,34 @@
     </div>
     <div class="textarea-container">
       <label for="reform-model">Model</label>
-      <textarea id="reform-model">{
-        "reformers": [
-          {
-            "array[1].two": 2
-          },
-          {
-            "boolean": false
-          },
-          {
-            "number": 4
-          },
-          {
-            "object.c": "c"
-          },
-          {
-            "string": "changed hello"
-          }
-        ],
-
-        "script": "input.property = newValue"
-      }</textarea>
+      <textarea id="reform-model">
+{
+  "reformers": [
+    {
+      "array[1].two": 2
+    },
+    {
+      "boolean": false
+    },
+    {
+      "number": 4
+    },
+    {
+      "object.c": "c"
+    },
+    {
+      "string": "changed hello"
+    }
+  ],
+  "scripts": [
+    {
+      "action": "setProperty",
+      "parameters": "input, property, currentValue, newValue",
+      "body": "return newValue"
+    }
+  ]
+}
+      </textarea>
     </div>
     <div class="textarea-container">
       <label for="output-json">Output Json</label>
