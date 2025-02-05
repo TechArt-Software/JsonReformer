@@ -3,7 +3,7 @@ import { ScriptArray } from './ReformerModel';
 /// <summary>
 /// Set a property value in a nested object, given a key path.
 /// </summary>
-function setPropertyValue(input: any, propertyPath: string, newValue: any, scripts?: ScriptArray): void {
+function setPropertyValue(input: any, propertyPath: string, newValue: any, scripts?: ScriptArray): boolean {
     if (scripts) {
         return _evalProperty(input, propertyPath, newValue, scripts);
     } else {
@@ -16,7 +16,7 @@ const _getProperty = (input: any, keyPath: string): any => {
       acc && typeof acc === 'object' ? acc[part] : undefined, input);
 };
   
-function _setProperty(input: any, keyPath: string, newValue: any): void {
+function _setProperty(input: any, keyPath: string, newValue: any): boolean {
     let current: any = input;
     const keys = keyPath.split(".");
     
@@ -41,38 +41,32 @@ function _setProperty(input: any, keyPath: string, newValue: any): void {
                 : (current[key] ??= {});
         }
     });
+    return true;
 }
 
 /// <summary>
 /// Set a property value in a nested object, given a key path using value from script.
 /// </summary>
-function _evalProperty(input: any, propertyPath: string, newValue: any, scripts: ScriptArray): void {
+function _evalProperty(input: any, propertyPath: string, newValue: any, scripts: ScriptArray): boolean {
     try {
         const property = propertyPath
             .replace(/\[(\d+)]/g, ".$1") // Convert array indices to dot notation
             .split(".")
             .map(key => (/^\d+$/.test(key) ? `[${key}]` : `.${key}`))
             .join("")
-            .replace(/^\./, ""); // Ensure no leading dot for eval
-
-        // return input;
-        // const result = eval(`input.${property} = newValue`);
-        // const result = eval(`newValue`);
+            .replace(/^\./, ""); // Ensure no leading dot for eval;
 
         if (!scripts || scripts.length === 0) {
             throw new Error('Scripts array is undefined or empty');
         }
 
         const currentValue = _getProperty(input, property);
-        // scripts?.forEach(({ action, parameters, body }) => {
-        //     const evalProperty = new Function('input', 'property', 'currentValue', 'newValue', 'body');
-        //     input = evalProperty(input, property, currentValue, newValue, body);
-        //     _setProperty(input, propertyPath, input);
-        // });
-
-        const setProperty = new Function('input', 'property', 'currentValue', 'newValue', scripts[0].body);
-        const result = setProperty(input, property, currentValue, newValue);
-        return _setProperty(input, propertyPath, result);
+        scripts?.forEach(({ action, parameters, body }) => {
+            const evalProperty = new Function('input', 'property', 'currentValue', 'newValue', body);
+            const result = evalProperty(input, property, currentValue, newValue);
+            _setProperty(input, propertyPath, result);
+        });
+        return true;
     } catch (error: any) {
         throw new Error(`Failed to set value at path "${propertyPath}": ${error.message}`);
     }
