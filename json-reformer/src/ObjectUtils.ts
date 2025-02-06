@@ -11,10 +11,31 @@ function setPropertyValue(input: any, propertyPath: string, newValue: any, scrip
     }
 }
 
-const _getProperty = (input: any, keyPath: string): any => {
-    return keyPath.split('.').reduce((acc: any, part: string) => 
-      acc && typeof acc === 'object' ? acc[part] : undefined, input);
-};
+function _getProperty(input: any, keyPath: string): any {
+    const keys = keyPath.split(".");
+    let current: any = input;
+  
+    for (const key of keys) {
+      const arrayMatch = key.match(/(.+?)\[(\d+)]/); // Check for array access like "array[1]"
+      if (arrayMatch) {
+        const arrayKey = arrayMatch[1];
+        const index = parseInt(arrayMatch[2], 10);
+        current = current[arrayKey];
+        if (!Array.isArray(current)) {
+          throw new Error(`${arrayKey} is not an array`);
+        }
+        current = current[index];
+      } else {
+        current = current[key];
+      }
+  
+      if (current === undefined) {
+        throw new Error(`Key path "${keyPath}" does not exist`);
+      }
+    }
+  
+    return current;
+  }
   
 function _setProperty(input: any, keyPath: string, newValue: any): boolean {
     let current: any = input;

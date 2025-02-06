@@ -126,4 +126,38 @@ describe('test objectReformer', () => {
     // Assert
     expect(result.prop1.prop11.prop111[0].prop1111).toEqual(2222);
   });
+
+
+  it('reform loop on all ReformerModel elemets and evaluate sum of the currentValue and newValue', () => {
+    // Arrange
+    const input = { 
+      prop1: {
+        prop11: {
+          prop111: [
+            { prop1111: 1111 },
+          ]
+        }
+      } };
+    const reformerModel = {
+                            reformers: [
+                              {
+                                "prop1.prop11.prop111[0].prop1111": 2222
+                              }
+                            ],
+                            scripts: [
+                                      {
+                                        "action": "setProperty",
+                                        "parameters": "input, property, currentValue, newValue",
+                                        "body": "return currentValue + newValue"
+                                      }
+                                    ]
+                          };
+    const reformer = ObjectReformer(reformerModel);
+    
+    // Act
+    const result = reformer.reform(input);
+
+    // Assert
+    expect(result.prop1.prop11.prop111[0].prop1111).toEqual(3333);
+  });
 });
