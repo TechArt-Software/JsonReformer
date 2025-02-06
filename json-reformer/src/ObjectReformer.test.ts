@@ -43,7 +43,7 @@ describe('test objectReformer', () => {
     expect(result.prop1.prop12.prop122[1].propWXYZ).toEqual(1234);
   });
 
-  it('reform loop on all ReformerModel elemets and evaluate the value on the given property using script', () => {
+  it('reform loop on all ReformerModel elemets and evaluate to set new  value on the given property using script', () => {
     // Arrange
     const input = { 
       prop0: 0, 
@@ -91,5 +91,39 @@ describe('test objectReformer', () => {
     expect(result.prop0).toEqual(100);
     expect(result.prop1.prop11).toEqual(1100);
     expect(result.prop1.prop12.prop122[1].propWXYZ).toEqual(1234);
+  });
+
+  it('reform loop on all ReformerModel elemets and evaluate the value on the given property using script', () => {
+    // Arrange
+    const input = { 
+      prop1: {
+        prop11: {
+          prop111: [
+            { prop1111: 1111 },
+            { prop2222: 2222 },
+          ]
+        }
+      } };
+    const reformerModel = {
+                            reformers: [
+                              {
+                                "prop1.prop11.prop111[0].prop1111": 1234
+                              }
+                            ],
+                            scripts: [
+                                      {
+                                        "action": "setProperty",
+                                        "parameters": "input, property, currentValue, newValue",
+                                        "body": "return input.prop1.prop11.prop111[1].prop2222"
+                                      }
+                                    ]
+                          };
+    const reformer = ObjectReformer(reformerModel);
+    
+    // Act
+    const result = reformer.reform(input);
+
+    // Assert
+    expect(result.prop1.prop11.prop111[0].prop1111).toEqual(2222);
   });
 });
