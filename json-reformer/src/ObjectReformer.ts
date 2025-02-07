@@ -1,4 +1,4 @@
-import ReformerModel from './ReformerModel';
+import ReformerModel, { ReformersStatus } from './ReformerModel';
 import setPropertyValue from './ObjectUtils';
 /// <summary>
 /// ObjectReformer module to 
@@ -6,8 +6,11 @@ import setPropertyValue from './ObjectUtils';
 export const ObjectReformer = (model: ReformerModel) => {
 
     // assign model to local Model property
-    const Model = model;
-    
+    const _model = model;
+
+    // Status of property in reformers
+    let _reformersStatus: ReformersStatus = new Map();
+
     /// <summary>
     /// Reform the input object according to the reformer model.
     /// </summary>
@@ -17,10 +20,15 @@ export const ObjectReformer = (model: ReformerModel) => {
                 throw new Error("Invalid input");
             }
 
-            for (let reformer of Model.reformers) {
-                const key = Object.keys(reformer)[0];
-                const newValue = reformer[key];
-                setPropertyValue(input, key, newValue, Model.scripts);
+            for (let reformer of _model.reformers) {
+                const propertyPath = Object.keys(reformer)[0];
+                // Skip if property is already reformed
+                if(_reformersStatus.has(propertyPath)) {
+                    continue;
+                }
+                const newValue = reformer[propertyPath];
+                const status = setPropertyValue(input, propertyPath, newValue, reformer.scripts ? reformer.scripts : _model.scripts);
+                _reformersStatus.set(propertyPath, status);
             }
             return input;
         } catch (error: any) {

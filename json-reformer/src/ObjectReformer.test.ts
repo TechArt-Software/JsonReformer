@@ -198,4 +198,85 @@ describe('test objectReformer', () => {
     // Assert
     expect(result.Sum).toEqual(6);
   });
+
+  it('reform loop on all ReformerModel elemets, evaluate the value on a given property using script has precedence over general script', () => {
+    // Arrange
+    const input = { 
+      prop1: {
+        prop11: {
+          prop111: [
+            { prop1111: 1111 },
+            { prop2222: 2222 },
+          ]
+        }
+      } };
+    const reformerModel = {
+                            reformers: [
+                              {
+                                "prop1.prop11.prop111[0].prop1111": 3333,
+                                scripts: [
+                                  {
+                                    "action": "setProperty",
+                                    "parameters": "input, property, currentValue, newValue",
+                                    "body": "return currentValue + newValue"
+                                  }
+                                ]
+                              },
+                              {
+                                "prop1.prop11.prop111[0].prop1111": 1111
+                              }
+                            ],
+                            scripts: [
+                                      {
+                                        "action": "setProperty",
+                                        "parameters": "input, property, currentValue, newValue",
+                                        "body": "return input.prop1.prop11.prop111[1].prop2222"
+                                      }
+                                    ]
+                          };
+    const reformer = ObjectReformer(reformerModel);
+    
+    // Act
+    const result = reformer.reform(input);
+
+    // Assert
+    expect(result.prop1.prop11.prop111[0].prop1111).toEqual(4444);
+  });
+
+  it('reform loop on all ReformerModel elemets, only evaluate the first property when duplicate is defined', () => {
+    // Arrange
+    const input = { 
+      prop1: {
+        prop11: {
+          prop111: [
+            { prop1111: 1111 },
+            { prop2222: 2222 },
+          ]
+        }
+      } };
+    const reformerModel = {
+                            reformers: [
+                              {
+                                "prop1.prop11.prop111[0].prop1111": 3333
+                              },
+                              {
+                                "prop1.prop11.prop111[0].prop1111": 1111
+                              }
+                            ],
+                            scripts: [
+                                      {
+                                        "action": "setProperty",
+                                        "parameters": "input, property, currentValue, newValue",
+                                        "body": "return input.prop1.prop11.prop111[1].prop2222"
+                                      }
+                                    ]
+                          };
+    const reformer = ObjectReformer(reformerModel);
+    
+    // Act
+    const result = reformer.reform(input);
+
+    // Assert
+    expect(result.prop1.prop11.prop111[0].prop1111).toEqual(2222);
+  });
 });
