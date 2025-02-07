@@ -279,4 +279,53 @@ describe('test objectReformer', () => {
     // Assert
     expect(result.prop1.prop11.prop111[0].prop1111).toEqual(2222);
   });
+
+  it('reform loop on all ReformerModel elemets, log the properties evaluation errors', () => {
+    // Arrange
+    const input = { 
+      prop1: {
+        prop11: {
+          prop111: [
+            { prop1111: 1111 },
+            { prop2222: 2222 },
+          ]
+        }
+      } };
+    const reformerModel = {
+                            reformers: [
+                              {
+                                "prop1.prop11.prop111[0].prop1111": 3333,
+                                scripts: [
+                                  {
+                                    "action": "setProperty",
+                                    "parameters": "input, property, currentValue, newValue",
+                                    "body": "throw new Error('Property evaluation error')"
+                                  }
+                                ]
+                              },
+                              {
+                                "prop1.prop11.prop111[1].prop2222": 4444,
+                                scripts: [
+                                  {
+                                    "action": "setProperty",
+                                    "parameters": "input, property, currentValue, newValue",
+                                    "body": "return newValue"
+                                  }
+                                ]
+                              }
+                            ]
+                          };
+    const reformer = ObjectReformer(reformerModel);
+    
+    // Act
+    const result = reformer.reform(input);
+    const reformerStatus = reformer.status;
+    
+    // Assert
+    const prop1ReformerStatus = reformerStatus.get('prop1.prop11.prop111[0].prop1111');
+    expect(result.prop1.prop11.prop111[0].prop1111).toEqual(1111);
+    expect(result.prop1.prop11.prop111[1].prop2222).toEqual(4444);
+    expect(prop1ReformerStatus).toBeInstanceOf(Error);
+    expect(prop1ReformerStatus?.toString()).toEqual("Error: Property evaluation error");
+  });
 });

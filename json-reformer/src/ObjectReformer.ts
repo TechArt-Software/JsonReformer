@@ -37,6 +37,7 @@ export const ObjectReformer = (model: ReformerModel) => {
     }
 
     return {
-        reform
+        reform,
+        status: _reformersStatus
     };
   };

@@ -1,9 +1,9 @@
-import { ScriptArray } from './ReformerModel';
+import { ScriptArray, PropertyStatus } from './ReformerModel';
 
 /// <summary>
 /// Set a property value in a nested object, given a key path.
 /// </summary>
-function setPropertyValue(input: any, propertyPath: string, newValue: any, scripts?: ScriptArray): boolean {
+function setPropertyValue(input: any, propertyPath: string, newValue: any, scripts?: ScriptArray): PropertyStatus {
     if (scripts) {
         return _evalProperty(input, propertyPath, newValue, scripts);
     } else {
@@ -37,38 +37,42 @@ function _getProperty(input: any, keyPath: string): any {
     return current;
   }
   
-function _setProperty(input: any, keyPath: string, newValue: any): boolean {
+function _setProperty(input: any, keyPath: string, newValue: any): PropertyStatus {
     let current: any = input;
-    const keys = keyPath.split(".");
-    
-    keys.forEach((key, index) => {
-        const match = key.match(/(.+?)\[(\d+)]/);
+    try {
+        const keys = keyPath.split(".");
         
-        if (match) {
-            const [_, arrayKey, arrayIndex] = match;
-            const idx = Number(arrayIndex);
+        keys.forEach((key, index) => {
+            const match = key.match(/(.+?)\[(\d+)]/);
             
-            current[arrayKey] ??= [];
-            if (!Array.isArray(current[arrayKey])) {
-                throw new Error(`${arrayKey} is not an array`);
-            }
+            if (match) {
+                const [_, arrayKey, arrayIndex] = match;
+                const idx = Number(arrayIndex);
+                
+                current[arrayKey] ??= [];
+                if (!Array.isArray(current[arrayKey])) {
+                    throw new Error(`${arrayKey} is not an array`);
+                }
 
-            current = (index === keys.length - 1) 
-                ? (current[arrayKey][idx] = newValue) 
-                : (current[arrayKey][idx] ??= {});
-        } else {
-            current = (index === keys.length - 1) 
-                ? (current[key] = newValue) 
-                : (current[key] ??= {});
-        }
-    });
-    return true;
+                current = (index === keys.length - 1) 
+                    ? (current[arrayKey][idx] = newValue) 
+                    : (current[arrayKey][idx] ??= {});
+            } else {
+                current = (index === keys.length - 1) 
+                    ? (current[key] = newValue) 
+                    : (current[key] ??= {});
+            }
+        });
+        return null;
+    } catch (error: any) {
+        return error;
+    }
 }
 
 /// <summary>
 /// Set a property value in a nested object, given a key path using value from script.
 /// </summary>
-function _evalProperty(input: any, propertyPath: string, newValue: any, scripts: ScriptArray): boolean {
+function _evalProperty(input: any, propertyPath: string, newValue: any, scripts: ScriptArray): PropertyStatus {
     try {
         const property = propertyPath
             .replace(/\[(\d+)]/g, ".$1") // Convert array indices to dot notation
@@ -87,9 +91,9 @@ function _evalProperty(input: any, propertyPath: string, newValue: any, scripts:
             const result = evalProperty(input, property, currentValue, newValue);
             _setProperty(input, propertyPath, result);
         });
-        return true;
+        return null;
     } catch (error: any) {
-        throw new Error(`Failed to set value at path "${propertyPath}": ${error.message}`);
+        return error;
     }
 }
 

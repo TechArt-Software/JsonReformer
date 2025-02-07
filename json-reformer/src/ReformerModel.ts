@@ -7,12 +7,12 @@ interface Script {
 // Alias property type as string
 type Property = string;
 
-type PropertyStatus = boolean;
+export type PropertyStatus = string | undefined | null | Error;
 
 // Status of all reformers
 export type ReformersStatus = Map<Property, PropertyStatus>;
 
-export type ScriptArray = Array<Script> | undefined;
+export type ScriptArray = Array<Script> | undefined | null;
 
 export default interface ReformerModel {
     reformers: Array<{ [property: Property]: any, scripts?: ScriptArray }>;
