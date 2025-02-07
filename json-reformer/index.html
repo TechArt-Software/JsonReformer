@@ -89,7 +89,14 @@
 {
   "reformers": [
     {
-      "array[1].two": 2
+      "array[1].two": 2,
+      "scripts": [
+        {
+          "action": "setProperty",
+          "parameters": "input, property, currentValue, newValue",
+          "body": "return currentValue + newValue"
+        }
+    ]
     },
     {
       "boolean": false
