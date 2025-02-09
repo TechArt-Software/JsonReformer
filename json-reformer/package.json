@@ -1,6 +1,6 @@
 {
   "name": "@techart-software/json-reformer",
-  "version": "1.0.0",
+  "version": "1.1.16",
   "description": "",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -13,7 +13,8 @@
   "scripts": {
     "test": "jest",
     "build": "tsup",
-    "server": "python3 -m http.server -d dist"
+    "server": "python3 -m http.server -d dist",
+    "publish": "npm version patch --no-git-tag-version && npm publish --access public && git reset --hard"
   },
   "files": [
     "dist",
