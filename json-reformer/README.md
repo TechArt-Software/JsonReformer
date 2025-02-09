@@ -11,6 +11,12 @@ Run the following commad to start a server to preview the Json Reformer:
 ```bash
 npm run server
 ```
+
+Run the following commad to version and publish a json reformer package:
+```bash
+npm run publish
+```
+
 The preview site can be accessed in the following url after running the server:
 
 http://localhost:8000/
