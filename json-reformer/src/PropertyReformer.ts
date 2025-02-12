@@ -93,7 +93,7 @@ export const PropertyReformer = (scripts: ScriptArray) => {
 
     const reform = (reformer: Reformer, input: any, property: Property ) => {
         const newValue = reformer[property];
-        const propertyScript = reformer.scripts ?? scripts;
+        const propertyScript = reformer.scripts ?? _scripts;
 
         if (propertyScript) {
             return EvalProperty(input, property, newValue, propertyScript);
