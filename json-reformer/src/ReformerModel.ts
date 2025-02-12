@@ -5,7 +5,7 @@ interface Script {
 }
 
 // Alias property type as string
-type Property = string;
+export type Property = string;
 
 export type PropertyStatus = string | undefined | null | Error;
 
@@ -14,7 +14,12 @@ export type ReformersStatus = Map<Property, PropertyStatus>;
 
 export type ScriptArray = Array<Script> | undefined | null;
 
+export type Reformer = {
+  [property: Property]: any;
+  scripts?: ScriptArray;
+};
+
 export default interface ReformerModel {
-    reformers: Array<{ [property: Property]: any, scripts?: ScriptArray }>;
+    reformers: Array<Reformer>;
     scripts?: ScriptArray;
 }
