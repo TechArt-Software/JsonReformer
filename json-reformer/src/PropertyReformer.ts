@@ -89,13 +89,10 @@ export const PropertyReformer = () => {
     }
 
     const reform = (input: any, propertyPath: Property, newValue: any, scripts: ScriptArray ) => {
-        let status;
         if (scripts) {
-            status = EvalProperty(input, propertyPath, newValue, scripts);
-        } else {
-            status = SetProperty(input, propertyPath, newValue);
-        }
-        return status;
+            return EvalProperty(input, propertyPath, newValue, scripts);
+        } 
+        return SetProperty(input, propertyPath, newValue);
     };
 
     return {

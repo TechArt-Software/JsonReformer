@@ -280,7 +280,7 @@ describe('test objectReformer', () => {
     expect(result.prop1.prop11.prop111[0].prop1111).toEqual(2222);
   });
 
-  it('reform loop on all ReformerModel elemets, log the properties evaluation errors', () => {
+  it('reform loop on all ReformerModel elemets, log the properties evaluation errors', () => { 
     // Arrange
     const input = { 
       prop1: {
