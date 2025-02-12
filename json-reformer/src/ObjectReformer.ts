@@ -11,8 +11,8 @@ export const ObjectReformer = (model: ReformerModel) => {
     // Status of property in reformers
     let _reformersStatus: ReformersStatus = new Map();
 
-    // PropertyReformer instance
-    const { reform : reformProperty } = PropertyReformer();
+    // assign reformProperty to local reformProperty property
+    const { reform : reformProperty } = PropertyReformer(model.scripts);
 
     /// <summary>
     /// Reform the input object according to the reformer model.
@@ -29,8 +29,8 @@ export const ObjectReformer = (model: ReformerModel) => {
                 if(_reformersStatus.has(propertyPath)) {
                     continue;
                 }
-                const newValue = reformer[propertyPath];
-                const status = reformProperty(input, propertyPath, newValue, reformer.scripts ?? _model.scripts);        
+
+                const status = reformProperty(reformer, input, propertyPath);
                 _reformersStatus.set(propertyPath, status);
             }
             return input;

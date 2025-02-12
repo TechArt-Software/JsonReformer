@@ -1,6 +1,9 @@
-import { ScriptArray, PropertyStatus, Property } from './ReformerModel';
+import { ScriptArray, PropertyStatus, Property, Reformer } from './ReformerModel';
 
-export const PropertyReformer = () => {
+export const PropertyReformer = (scripts: ScriptArray) => {
+
+    // assign scripts to local scripts property
+    const _scripts = scripts;
 
     function _getProperty(input: any, property: Property): any {
         const keys = property.split(".");
@@ -63,9 +66,9 @@ export const PropertyReformer = () => {
     /// <summary>
     /// Set a property value in a nested object, given a key path using value from script.
     /// </summary>
-    function EvalProperty(input: any, propertyPath: Property, newValue: any, scripts: ScriptArray): PropertyStatus {
+    function EvalProperty(input: any, property: Property, newValue: any, scripts: ScriptArray): PropertyStatus {
         try {
-            const property = propertyPath
+            const propertyPath = property
                 .replace(/\[(\d+)]/g, ".$1") // Convert array indices to dot notation
                 .split(".")
                 .map(key => (/^\d+$/.test(key) ? `[${key}]` : `.${key}`))
@@ -76,11 +79,11 @@ export const PropertyReformer = () => {
                 throw new Error('Scripts array is undefined or empty');
             }
 
-            const currentValue = _getProperty(input, property);
+            const currentValue = _getProperty(input, propertyPath);
             scripts?.forEach(({ action, parameters, body }) => {
                 const evalProperty = new Function('input', 'property', 'currentValue', 'newValue', body);
-                const result = evalProperty(input, property, currentValue, newValue);
-                SetProperty(input, propertyPath, result);
+                const result = evalProperty(input, propertyPath, currentValue, newValue);
+                SetProperty(input, property, result);
             });
             return null;
         } catch (error: any) {
@@ -88,11 +91,14 @@ export const PropertyReformer = () => {
         }
     }
 
-    const reform = (input: any, propertyPath: Property, newValue: any, scripts: ScriptArray ) => {
-        if (scripts) {
-            return EvalProperty(input, propertyPath, newValue, scripts);
+    const reform = (reformer: Reformer, input: any, property: Property ) => {
+        const newValue = reformer[property];
+        const propertyScript = reformer.scripts ?? scripts;
+
+        if (propertyScript) {
+            return EvalProperty(input, property, newValue, propertyScript);
         } 
-        return SetProperty(input, propertyPath, newValue);
+        return SetProperty(input, property, newValue);
     };
 
     return {
