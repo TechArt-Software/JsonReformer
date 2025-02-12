@@ -9,7 +9,15 @@
             "request": "launch",
             "name": "Launch Chrome against localhost",
             "url": "http://localhost:8000",
-            "webRoot": "${workspaceFolder}"
+            "webRoot": "${workspaceFolder}/json-reformer/dist",
+            "sourceMaps": true,
+            "sourceMapPathOverrides": {
+                "webpack:///src/*": "${workspaceFolder}/json-reformer/src/*",
+                "webpack:///./src/*": "${workspaceFolder}/json-reformer/src/*",
+                "webpack:///../src/*": "${workspaceFolder}/json-reformer/src/*",
+                "webpack:///dist/*": "${workspaceFolder}/json-reformer/dist/*",
+                "webpack:///*": "${workspaceFolder}/json-reformer/*"
+            }
         }
     ]
 }
