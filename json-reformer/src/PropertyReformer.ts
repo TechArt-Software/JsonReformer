@@ -9,6 +9,16 @@ export const PropertyReformer = (scripts: ScriptArray) => {
     // assign scripts to local scripts property
     const _scripts = scripts;
 
+    const processScript = (input: any, property: Property, propertyScript: Script, currentValue: any, newValue: any) => {
+        switch (propertyScript.action.toLowerCase()) {
+            case 'filter':
+                return FilterProperty(currentValue, propertyScript);
+            default:
+                break;
+        }
+        return EvalProperty(input, property, currentValue, newValue, propertyScript);
+    }
+
     const reform = (reformer: Reformer, input: any, property: Property ): PropertyStatus => {
         try
         {
@@ -18,7 +28,7 @@ export const PropertyReformer = (scripts: ScriptArray) => {
             if (propertyScripts) {
                 propertyScripts.forEach(propertyScript => {
                     const currentValue = GetProperty(input, property);
-                    const result = processScript(propertyScript, currentValue, newValue);
+                    const result = processScript(input, property, propertyScript, currentValue, newValue);
                     SetProperty(input, property, result);
                 });
             } else {
@@ -27,16 +37,6 @@ export const PropertyReformer = (scripts: ScriptArray) => {
             return null;
         } catch (error: any) {
             return error;
-        }
-
-        function processScript(propertyScript: Script, currentValue: any, newValue: any) {
-            switch (propertyScript.action.toLowerCase()) {
-                case 'filter':
-                    return FilterProperty(currentValue, propertyScript);
-                default:
-                    break;
-            }
-            return EvalProperty(input, property, currentValue, newValue, propertyScript);
         }
     };
 
