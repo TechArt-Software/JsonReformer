@@ -90,19 +90,22 @@
         "employees": [
           {
             "name": "John",
-            "age": 30
+            "age": 30,
+            "gender": "male"
           },
           {
             "name": "Tom",
-            "age": 25
+            "age": 25,
+            "gender": "male"
           },
           {
             "name": "Jim",
             "age": 40
           },
           {
-            "name": "Jill",
-            "age": 35
+            "name": "Jolie",
+            "age": 35,
+            "gender": "female"
           },
           {
             "name": "Ali",
@@ -144,7 +147,20 @@
         {
           "action": "filter",
           "parameters": "input, property, currentValue, newValue",
-          "body": ".select(e=>({name:e.name,age:e.age})).where(e=>e.age>=25&&e.age<=40&&e.name.toLowerCase().includes('i')).orderBy(e=>[e.name,e.age])"
+          "body": "
+              .select( e=>({
+                    name:e.name, 
+                    age:e.age
+                   }))
+             .where( e=>
+                  e.age>=25 && 
+                  e.age<=40 && 
+                  e.name.toLowerCase().includes('i') 
+                )
+              .orderBy( e=>[
+                      e.name, 
+                      e.age
+                   ])"
         }
       ]
     }
@@ -174,11 +190,47 @@
     const modelElement = document.getElementById('reform-model');
     const outputElement = document.getElementById('output-json');
 
+    /**
+     * Cleans up a JSON string by removing extra unused characters and
+     * normalizing string literals so that newlines and extra whitespace
+     * inside them are replaced with single spaces.
+     *
+     * @param {string} jsonStr - The original JSON string.
+     * @returns {string} - The cleaned JSON string, ready for JSON.parse.
+     */
+    function fixJSON(jsonStr) {
+      // Step 1: Trim overall whitespace from the input.
+      const trimmed = jsonStr.trim();
+
+      // Step 2: Extract the core JSON (from first '{' or '[' to last '}' or ']').
+      const startIndex = trimmed.search(/[\{\[]/);
+      const endIndex = Math.max(trimmed.lastIndexOf('}'), trimmed.lastIndexOf(']'));
+      if (startIndex === -1 || endIndex === -1) {
+        throw new Error("Invalid JSON structure.");
+      }
+      const jsonCore = trimmed.substring(startIndex, endIndex + 1);
+
+      // Step 3: Replace newlines and extra spaces inside JSON string literals.
+      // This regex matches any JSON string literal.
+      const fixed = jsonCore.replace(/"((?:\\.|[^"\\])*)"/g, (match, content) => {
+        // Replace newline characters (and any following whitespace) with a single space.
+        let cleanedContent = content.replace(/\n\s*/g, ' ');
+        // Collapse multiple spaces into one.
+        cleanedContent = cleanedContent.replace(/\s{2,}/g, ' ');
+        // Trim any accidental leading/trailing spaces from the content.
+        cleanedContent = cleanedContent.trim();
+        // Return the fixed string literal (with quotes).
+        return `"${cleanedContent}"`;
+      });
+
+      return fixed;
+    }
+
     function modifyJsonUI() { 
       try {
         // Apply the modifyJson function
         const input = JSON.parse(inputElement.value);
-        const model = JSON.parse(modelElement.value);
+        const model = JSON.parse(fixJSON(modelElement.value));
 
         const reformer = ObjectReformer(model);
         const modifiedData = reformer.reform(input);
