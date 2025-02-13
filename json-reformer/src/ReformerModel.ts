@@ -1,4 +1,4 @@
-interface Script {
+export interface Script {
   action: string;
   parameters: string;
   body: string;

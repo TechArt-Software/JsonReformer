@@ -1,4 +1,4 @@
-import { PropertyStatus, Property, ScriptArray } from '../ReformerModel';
+import { PropertyStatus, Property, Script } from '../ReformerModel';
 import SetProperty from './SetProperty';
 import GetProperty from './GetProperty';
 
@@ -49,24 +49,10 @@ function applyQuery<T>(arr: T[], query: string): any[] {
     return queryFunction(arr);
 }
 
-export function FilterProperty(input: any, property: Property, scripts: ScriptArray): PropertyStatus {
+export function FilterProperty(input: any, property: Property, currentValue: any, script: Script): PropertyStatus {
     try {
-        const propertyPath = property
-            .replace(/\[(\d+)]/g, ".$1") // Convert array indices to dot notation
-            .split(".")
-            .map(key => (/^\d+$/.test(key) ? `[${key}]` : `.${key}`))
-            .join("")
-            .replace(/^\./, ""); // Ensure no leading dot for eval;
-
-        if (!scripts || scripts.length === 0) {
-            throw new Error('Scripts array is undefined or empty');
-        }
-
-        const currentValue = GetProperty(input, propertyPath);
-        scripts?.forEach(({ action, parameters, body }) => {
-            const filteredArray = applyQuery(currentValue, body);
-            SetProperty(input, property, filteredArray);
-        });
+        const filteredArray = applyQuery(currentValue, script.body);
+        SetProperty(input, property, filteredArray);
         return null;
     } catch (error: any) {
         return error;
