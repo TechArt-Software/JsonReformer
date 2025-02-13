@@ -1,6 +1,4 @@
-import { PropertyStatus, Property, Script } from '../ReformerModel';
-import SetProperty from './SetProperty';
-import GetProperty from './GetProperty';
+import { Script } from '../ReformerModel';
 
 // Extend the Array interface to include our custom methods
 declare global {
@@ -49,14 +47,8 @@ function applyQuery<T>(arr: T[], query: string): any[] {
     return queryFunction(arr);
 }
 
-export function FilterProperty(input: any, property: Property, currentValue: any, script: Script): PropertyStatus {
-    try {
-        const filteredArray = applyQuery(currentValue, script.body);
-        SetProperty(input, property, filteredArray);
-        return null;
-    } catch (error: any) {
-        return error;
-    }
+export function FilterProperty(currentValue: any, script: Script): any {
+    return applyQuery(currentValue, script.body);
 }
 
 export {};
