@@ -69,9 +69,15 @@
       <label for="input-json">Input Json</label>
       <textarea id="input-json">{
         "array": [
-          { "one" : 11 },
-          { "two" : 22 },
-          { "three" : 33 }
+          {
+            "one": 11
+          },
+          {
+            "two": 22
+          },
+          {
+            "three": 33
+          }
         ],
         "boolean": true,
         "null": null,
@@ -80,7 +86,29 @@
           "a": "b",
           "c": "d"
         },
-        "string": "Hello World"
+        "string": "Hello World",
+        "employees": [
+          {
+            "name": "John",
+            "age": 30
+          },
+          {
+            "name": "Tom",
+            "age": 25
+          },
+          {
+            "name": "Jim",
+            "age": 40
+          },
+          {
+            "name": "Jill",
+            "age": 35
+          },
+          {
+            "name": "Ali",
+            "age": 37
+          }
+        ]
       }</textarea>
     </div>
     <div class="textarea-container">
@@ -96,7 +124,7 @@
           "parameters": "input, property, currentValue, newValue",
           "body": "return currentValue + newValue"
         }
-    ]
+      ]
     },
     {
       "boolean": false
@@ -109,6 +137,16 @@
     },
     {
       "string": "changed hello"
+    },
+    {
+      "employees": [],
+      "scripts": [
+        {
+          "action": "filter",
+          "parameters": "input, property, currentValue, newValue",
+          "body": ".select(e=>({name:e.name,age:e.age})).where(e=>e.age>=25&&e.age<=40&&e.name.toLowerCase().includes('i')).orderBy(e=>[e.name,e.age])"
+        }
+      ]
     }
   ],
   "scripts": [
@@ -118,7 +156,7 @@
       "body": "return newValue"
     }
   ]
-}
+}      
       </textarea>
     </div>
     <div class="textarea-container">
