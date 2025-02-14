@@ -18,7 +18,7 @@ document.querySelector('#app').innerHTML = `
         </textarea>
         <div style="margin-left: 10px; width: 450px; height: 180px; background-color: #1e1e1e; color: #d4d4d4; font-family: 'Courier New', monospace; display: flex; align-items: center; padding: 10px; border-radius: 5px; overflow: auto;">
             <pre style="margin: 0; text-align: left;">
-<span style="color: #569CD6;">const</span> parsedInput = JSON.<span style="color: #DCDCAA;">parse</span>(input);
+<span style="color: #569CD6;">const</span> inputObject = JSON.<span style="color: #DCDCAA;">parse</span>(input);
             </pre>
         </div>
     </div>
@@ -44,8 +44,9 @@ document.querySelector('#app').innerHTML = `
         </textarea>
         <div style="margin-left: 10px; width: 450px; height: 270px; background-color: #1e1e1e; color: #d4d4d4; font-family: 'Courier New', monospace; display: flex; align-items: center; padding: 10px; border-radius: 5px; overflow: auto;">
             <pre style="margin: 0; text-align: left;">
-<span style="color: #569CD6;">const</span> parsedModel = JSON.<span style="color: #DCDCAA;">parse</span>(model); 
-<span style="color: #569CD6;">const</span> reformer = <span style="color: #DCDCAA;">ObjectReformer</span>(parsedModel);
+<span style="color: #569CD6;">const</span> modelObject = JSON.<span style="color: #DCDCAA;">parse</span>(model); 
+<span style="color: #569CD6;">const</span> reformer = <span style="color: #DCDCAA;">ObjectReformer</span>(modelObject);
+<span style="color: #569CD6;">const</span> output = reformer.<span style="color: #DCDCAA;">reform</span>(inputObject);
             </pre>
         </div>
     </div>
@@ -58,7 +59,7 @@ document.querySelector('#app').innerHTML = `
         <textarea id="jsonOutput" rows="10" cols="60" placeholder="Reformed JSON will appear here" style="height: 180px;"></textarea>
         <div style="margin-left: 10px; width: 450px; height: 180px; background-color: #1e1e1e; color: #d4d4d4; font-family: 'Courier New', monospace; display: flex; align-items: center; padding: 10px; border-radius: 5px; overflow: auto;">
             <pre style="margin: 0; text-align: left;">
-<span style="color: #569CD6;">const</span> output = reformer.<span style="color: #DCDCAA;">reform</span>(parsedInput);
+<span style="color: #569CD6;">const</span> output = JSON.<span style="color: #DCDCAA;">stringify</span>(outputObject, <span style="color: #DCDCAA;">null</span>, 2);
             </pre>
         </div>
     </div>
