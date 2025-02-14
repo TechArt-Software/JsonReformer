@@ -59,7 +59,7 @@ document.querySelector('#app').innerHTML = `
         <textarea id="jsonOutput" rows="10" cols="60" placeholder="Reformed JSON will appear here" style="height: 180px;"></textarea>
         <div style="margin-left: 10px; width: 450px; height: 180px; background-color: #1e1e1e; color: #d4d4d4; font-family: 'Courier New', monospace; display: flex; align-items: center; padding: 10px; border-radius: 5px; overflow: auto;">
             <pre style="margin: 0; text-align: left;">
-<span style="color: #569CD6;">const</span> output = JSON.<span style="color: #DCDCAA;">stringify</span>(outputObject, <span style="color: #DCDCAA;">null</span>, 2);
+<span style="color: #569CD6;">const</span> output = JSON.<span style="color: #DCDCAA;">stringify</span>(outputObject);
             </pre>
         </div>
     </div>
