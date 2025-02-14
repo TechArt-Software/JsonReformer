@@ -46,7 +46,7 @@ document.querySelector('#app').innerHTML = `
             <pre style="margin: 0; text-align: left;">
 <span style="color: #569CD6;">const</span> modelObject = JSON.<span style="color: #DCDCAA;">parse</span>(model); 
 <span style="color: #569CD6;">const</span> reformer = <span style="color: #DCDCAA;">ObjectReformer</span>(modelObject);
-<span style="color: #569CD6;">const</span> output = reformer.<span style="color: #DCDCAA;">reform</span>(inputObject);
+<span style="color: #569CD6;">const</span> outputObject = reformer.<span style="color: #DCDCAA;">reform</span>(inputObject);
             </pre>
         </div>
     </div>
