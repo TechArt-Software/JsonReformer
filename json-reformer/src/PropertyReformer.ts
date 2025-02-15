@@ -12,15 +12,15 @@ export const PropertyReformer = (scripts: ScriptArray) => {
     const processScript = (input: any, property: Property, propertyScript: Script, currentValue: any, newValue: any) => {
         const action = propertyScript?.action;
         if(!action){
-            return EvalProperty(input, property, currentValue, newValue, propertyScript);
+            return EvalProperty(input, property, currentValue, newValue, propertyScript.body);
         }
 
         switch (action.toLowerCase()) {
             case 'filter':
-                return FilterProperty(currentValue, propertyScript);
+                return FilterProperty(currentValue, propertyScript.body);
             case 'eval':
             case 'evaluate':
-                return EvalProperty(input, property, currentValue, newValue, propertyScript);
+                return EvalProperty(input, property, currentValue, newValue, propertyScript.body);
             default:
                 break;
         }

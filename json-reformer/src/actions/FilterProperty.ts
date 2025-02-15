@@ -47,8 +47,8 @@ function applyQuery<T>(arr: T[], query: string): any[] {
     return queryFunction(arr);
 }
 
-export function FilterProperty(currentValue: any, script: Script): any {
-    return applyQuery(currentValue, script.body);
+export function FilterProperty(currentValue: any, script: string): any {
+    return applyQuery(currentValue, script);
 }
 
 export {};
