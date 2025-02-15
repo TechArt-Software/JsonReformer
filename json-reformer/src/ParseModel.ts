@@ -1,4 +1,4 @@
-import ReformerModel from './ReformerModel';
+import ReformerModel from './reformer/ReformerModel';
 /**
  * Cleans up a JSON string by removing extra unused characters and
  * normalizing string literals so that newlines and extra whitespace

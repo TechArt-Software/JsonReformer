@@ -1,5 +1,5 @@
 
-import { Property } from '../ReformerModel';
+import { Property } from '../reformer/ReformerModel';
 
 function GetProperty(input: any, property: Property): any {
     let current: any = input;

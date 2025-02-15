@@ -1,5 +1,5 @@
 
-import { Property } from '../ReformerModel';
+import { Property } from '../reformer/ReformerModel';
 
 function SetProperty(input: any, property: Property, newValue: any): any {
     let current: any = input;

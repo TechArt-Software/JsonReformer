@@ -1,8 +1,8 @@
 import { ScriptArray, Property, Reformer, PropertyStatus, Script } from './ReformerModel';
-import EvalProperty from './actions/EvalProperty';
-import SetProperty from './actions/SetProperty';
-import GetProperty from './actions/GetProperty';
-import { FilterProperty } from './actions/FilterProperty';
+import EvalProperty from '../actions/EvalProperty';
+import SetProperty from '../actions/SetProperty';
+import GetProperty from '../actions/GetProperty';
+import { FilterProperty } from '../actions/FilterProperty';
 
 export const PropertyReformer = (scripts: ScriptArray) => {
 

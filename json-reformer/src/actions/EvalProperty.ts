@@ -1,4 +1,4 @@
-import { Script, PropertyStatus, Property } from '../ReformerModel';
+import { Script, PropertyStatus, Property } from '../reformer/ReformerModel';
 
 /// <summary>
 /// Set a property value in a nested object, given a key path using value from script.

@@ -1,2 +1,2 @@
-export * from './ObjectReformer';
+export * from './reformer/ObjectReformer';
 export * from './ParseModel';

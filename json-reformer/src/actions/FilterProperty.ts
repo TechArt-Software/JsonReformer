@@ -1,4 +1,4 @@
-import { Script } from '../ReformerModel';
+import { Script } from '../reformer/ReformerModel';
 
 // Extend the Array interface to include our custom methods
 declare global {
