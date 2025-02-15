@@ -1,4 +1,4 @@
-import EvalProperty from "./EvalProperty";
+import { EvalProperty } from "./EvalProperty";
 
 describe('EvalProperty', () => {
     it('should evaluate a script and return the result', () => {

@@ -1,4 +1,3 @@
-import { exitCode } from 'process';
 import PropertyReformer from './PropertyReformer';
 
 describe('test PropertyReformer', () => {
@@ -120,42 +119,42 @@ describe('test PropertyReformer', () => {
    });
    // eval and evaluate to be passed to the following test
 
-it('reformer should call EvalProperty for "eval" or "evaluate" actions twice', () => {
-    // Arrange
-    const input = {
-        prop1: {
-            prop11: {
-                prop111: [
-                    { prop1111: 1111 },
-                ]
+    it('reformer should call EvalProperty for "eval" or "evaluate" actions twice', () => {
+        // Arrange
+        const input = {
+            prop1: {
+                prop11: {
+                    prop111: [
+                        { prop1111: 1111 },
+                    ]
+                }
             }
-        }
-    };
-    
-    const reform = {
-        "prop1.prop11.prop111[0].prop1111": 3333,
-        scripts: [
-            {
-                "action": "eval",
-                "parameters": "input, property, currentValue, newValue",
-                "body": "return newValue + currentValue;"
-            },
-            {
-                "action": "evaluate",
-                "parameters": "input, property, currentValue, newValue",
-                "body": "return currentValue * 2;"
-            }
-        ]
-    };
-    
-    const propertyPath = 'prop1.prop11.prop111[0].prop1111';
-    const reformer = PropertyReformer(null);
+        };
+        
+        const reform = {
+            "prop1.prop11.prop111[0].prop1111": 3333,
+            scripts: [
+                {
+                    "action": "eval",
+                    "parameters": "input, property, currentValue, newValue",
+                    "body": "return newValue + currentValue;"
+                },
+                {
+                    "action": "evaluate",
+                    "parameters": "input, property, currentValue, newValue",
+                    "body": "return currentValue * 2;"
+                }
+            ]
+        };
+        
+        const propertyPath = 'prop1.prop11.prop111[0].prop1111';
+        const reformer = PropertyReformer(null);
 
-    // Act
-    const reformed = reformer.reform(reform, input, propertyPath);
+        // Act
+        const reformed = reformer.reform(reform, input, propertyPath);
 
-    // Assert
-    expect(reformed).toBeNull();
-    expect(input.prop1.prop11.prop111[0].prop1111).toEqual(8888);
-});
+        // Assert
+        expect(reformed).toBeNull();
+        expect(input.prop1.prop11.prop111[0].prop1111).toEqual(8888);
+    });
 });

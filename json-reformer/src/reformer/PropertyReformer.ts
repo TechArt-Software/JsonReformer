@@ -1,46 +1,27 @@
-import { ScriptArray, Property, Reformer, PropertyStatus, Script } from './ReformerModel';
-import EvalProperty from '../actions/EvalProperty';
-import SetProperty from '../actions/SetProperty';
-import GetProperty from '../actions/GetProperty';
-import { FilterProperty } from '../actions/FilterProperty';
+import { ScriptArray, Property, Reformer, PropertyStatus } from './ReformerModel';
+import PropertyHandler from '../handler/PropertyHandler';
 
 export const PropertyReformer = (scripts: ScriptArray) => {
 
     // assign scripts to local scripts property
     const _scripts = scripts;
 
-    const processScript = (input: any, property: Property, propertyScript: Script, currentValue: any, newValue: any) => {
-        const action = propertyScript?.action;
-        if(!action){
-            return EvalProperty(input, property, currentValue, newValue, propertyScript.body);
-        }
-
-        switch (action.toLowerCase()) {
-            case 'filter':
-                return FilterProperty(currentValue, propertyScript.body);
-            case 'eval':
-            case 'evaluate':
-                return EvalProperty(input, property, currentValue, newValue, propertyScript.body);
-            default:
-                break;
-        }
-        throw new Error(`Invalid action: ${action}`);
-    }
-
     const reform = (reformer: Reformer, input: any, property: Property ): PropertyStatus => {
         try
         {
+            const { getValue, setValue, processValue } = PropertyHandler(input);
+
             const newValue = reformer[property];
             const propertyScripts = reformer.scripts ?? _scripts;
 
             if (propertyScripts) {
                 propertyScripts.forEach(propertyScript => {
-                    const currentValue = GetProperty(input, property);
-                    const result = processScript(input, property, propertyScript, currentValue, newValue);
-                    SetProperty(input, property, result);
+                    const currentValue = getValue(property);
+                    const result = processValue(property, propertyScript, currentValue, newValue);
+                    setValue(property, result);
                 });
             } else {
-                SetProperty(input, property, newValue);
+                setValue(property, newValue);
             }
             return null;
         } catch (error: any) {
