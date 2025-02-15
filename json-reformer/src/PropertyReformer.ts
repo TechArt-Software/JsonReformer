@@ -18,6 +18,9 @@ export const PropertyReformer = (scripts: ScriptArray) => {
         switch (action.toLowerCase()) {
             case 'filter':
                 return FilterProperty(currentValue, propertyScript);
+            case 'eval':
+            case 'evaluate':
+                return EvalProperty(input, property, currentValue, newValue, propertyScript);
             default:
                 break;
         }
