@@ -10,13 +10,18 @@ export const PropertyReformer = (scripts: ScriptArray) => {
     const _scripts = scripts;
 
     const processScript = (input: any, property: Property, propertyScript: Script, currentValue: any, newValue: any) => {
-        switch (propertyScript.action.toLowerCase()) {
+        const action = propertyScript?.action;
+        if(!action){
+            return EvalProperty(input, property, currentValue, newValue, propertyScript);
+        }
+
+        switch (action.toLowerCase()) {
             case 'filter':
                 return FilterProperty(currentValue, propertyScript);
             default:
                 break;
         }
-        return EvalProperty(input, property, currentValue, newValue, propertyScript);
+        throw new Error(`Invalid action: ${action}`);
     }
 
     const reform = (reformer: Reformer, input: any, property: Property ): PropertyStatus => {

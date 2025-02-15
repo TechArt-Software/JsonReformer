@@ -15,7 +15,6 @@ describe('test PropertyReformer', () => {
                             "prop1.prop11.prop111[0].prop1111": 3333,
                             scripts: [
                                 {
-                                "action": "setProperty",
                                 "parameters": "input, property, currentValue, newValue",
                                 "body": "return newValue + currentValue;"
                                 }

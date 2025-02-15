@@ -1,5 +1,5 @@
 export interface Script {
-  action: string;
+  action?: string;
   parameters: string;
   body: string;
 }

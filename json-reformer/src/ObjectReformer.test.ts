@@ -76,7 +76,6 @@ describe('test objectReformer', () => {
                             ],
                             scripts: [
                                       {
-                                        "action": "setProperty",
                                         "parameters": "input, property, currentValue, newValue",
                                         "body": "return newValue"
                                       }
@@ -112,7 +111,6 @@ describe('test objectReformer', () => {
                             ],
                             scripts: [
                                       {
-                                        "action": "setProperty",
                                         "parameters": "input, property, currentValue, newValue",
                                         "body": "return input.prop1.prop11.prop111[1].prop2222"
                                       }
@@ -145,7 +143,6 @@ describe('test objectReformer', () => {
                             ],
                             scripts: [
                                       {
-                                        "action": "setProperty",
                                         "parameters": "input, property, currentValue, newValue",
                                         "body": "return currentValue + newValue"
                                       }
@@ -184,7 +181,6 @@ describe('test objectReformer', () => {
             ],
             scripts: [
               {
-                action: "setProperty",
                 parameters: "input, property, currentValue, newValue",
                 body: "return input.array.reduce((acc, obj) => acc + Object.values(obj)[0], 0)"
               }
@@ -216,7 +212,6 @@ describe('test objectReformer', () => {
                                 "prop1.prop11.prop111[0].prop1111": 3333,
                                 scripts: [
                                   {
-                                    "action": "setProperty",
                                     "parameters": "input, property, currentValue, newValue",
                                     "body": "return currentValue + newValue"
                                   }
@@ -228,7 +223,6 @@ describe('test objectReformer', () => {
                             ],
                             scripts: [
                                       {
-                                        "action": "setProperty",
                                         "parameters": "input, property, currentValue, newValue",
                                         "body": "return input.prop1.prop11.prop111[1].prop2222"
                                       }
@@ -265,7 +259,6 @@ describe('test objectReformer', () => {
                             ],
                             scripts: [
                                       {
-                                        "action": "setProperty",
                                         "parameters": "input, property, currentValue, newValue",
                                         "body": "return input.prop1.prop11.prop111[1].prop2222"
                                       }
@@ -297,7 +290,6 @@ describe('test objectReformer', () => {
                                 "prop1.prop11.prop111[0].prop1111": 3333,
                                 scripts: [
                                   {
-                                    "action": "setProperty",
                                     "parameters": "input, property, currentValue, newValue",
                                     "body": "throw new Error('Property evaluation error')"
                                   }
@@ -307,7 +299,6 @@ describe('test objectReformer', () => {
                                 "prop1.prop11.prop111[1].prop2222": 4444,
                                 scripts: [
                                   {
-                                    "action": "setProperty",
                                     "parameters": "input, property, currentValue, newValue",
                                     "body": "return newValue"
                                   }
