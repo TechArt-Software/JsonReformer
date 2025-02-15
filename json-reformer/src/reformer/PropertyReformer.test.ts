@@ -15,7 +15,6 @@ describe('test PropertyReformer', () => {
                             "prop1.prop11.prop111[0].prop1111": 3333,
                             scripts: [
                                 {
-                                "parameters": "input, property, currentValue, newValue",
                                 "body": "return newValue + currentValue;"
                                 }
                             ]
@@ -53,7 +52,6 @@ describe('test PropertyReformer', () => {
                             scripts: [
                                 {
                                     action: "filter",
-                                    parameters: "input, property, currentValue, newValue",
                                     body:  `
                                         .select(friend => ({ name: friend.name, age: friend.age }))
                                         .where(friend => 
@@ -101,7 +99,6 @@ describe('test PropertyReformer', () => {
                         scripts: [
                             {
                             "action": "invalid",
-                            "parameters": "input, property, currentValue, newValue",
                             "body": "return newValue + currentValue;"
                             }
                         ]
@@ -136,12 +133,10 @@ describe('test PropertyReformer', () => {
             scripts: [
                 {
                     "action": "eval",
-                    "parameters": "input, property, currentValue, newValue",
                     "body": "return newValue + currentValue;"
                 },
                 {
                     "action": "evaluate",
-                    "parameters": "input, property, currentValue, newValue",
                     "body": "return currentValue * 2;"
                 }
             ]

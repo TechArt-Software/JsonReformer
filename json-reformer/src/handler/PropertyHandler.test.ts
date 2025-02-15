@@ -170,7 +170,6 @@ describe('test PropertyHandler', () => {
 
             const { processValue } = PropertyHandler(input);
             const script: Script = {
-                parameters: '1',
                 body: 'return newValue'
             };
 
@@ -191,7 +190,6 @@ describe('test PropertyHandler', () => {
 
             const { processValue } = PropertyHandler(input);
             const script: Script = {
-                parameters: '1',
                 body: 'return newValue'
             };
 
@@ -211,7 +209,6 @@ describe('test PropertyHandler', () => {
 
             const { processValue } = PropertyHandler(input);
             const script: Script = {
-                parameters: '1',
                 body: 'value'
             };
 
